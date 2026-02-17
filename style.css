@@ -1,5 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Oswald", sans-serif; 
+  --font-display: "Roboto", sans-serif; 
 }
