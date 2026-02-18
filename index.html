@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Sign-up Form</title>
 </head>
-<body class="bg-[url(../assets/img-mountain.jpg)] bg-cover bg-center bg-black/50 bg-blend-overlay h-screen flex items-center">
+<body class="bg-[url(../assets/img-mountain.jpg)] bg-cover bg-center bg-black/50 bg-blend-overlay min-h-screen flex items-center">
     <section class="w-full mx-auto grid grid-cols-1 p-5 md:grid-cols-2 md:p-8 lg:p-12">
         <div class="flex items-center justify-center text-center bg-black/5 backdrop-blur-lg p-20 rounded-t-2xl md:rounded-l-2xl">
             <h1 class="text-4xl font-bold text-white">Welcome to our website</h1>
@@ -41,17 +42,51 @@
                 <div>
                     <button type="submit" class="bg-black text-white text-sm p-2.5 w-full rounded-full hover:bg-gray-900 active:scale-95 transition">Sign-up</button>
                 </div>
-                <hr>
-
+                <div class="relative flex items-center my-1">
+                    <div class="flex-grow border-t border-gray-200"></div>
+                    <span class="px-2 text-xs text-gray-500">Or Continue with</span>
+                    <div class="flex-grow border-t border-gray-200"></div>
+                </div>
             </form>
-            <button class="flex items-center justify-center w-full p-2.5 border-2 border-gray-200 rounded-full hover:bg-gray-50 transition text-sm">
-                <img src="https://cdn.iconscout.com/icon/free/png-256/free-google-icon-svg-download-png-1507807.png" alt="google-icon" class="w-4 h-4 mr-2">
-                <span class="text-sm">Continue with Google</span>
-            </button>
+            <div id="g_id_onload"
+                data-client_id="565064624268-s9alf3cd6eblo9il5mgvqi8p606r3203.apps.googleusercontent.com"
+                data-context="signup"
+                data-ux_mode="popup"
+                data-callback="handleCredentialResponse">
+            </div>
+
+            <div class="flex justify-center w-full">
+                <div class="g_id_signin" 
+                    data-type="standard" 
+                    data-shape="pill" 
+                    data-theme="outline" 
+                    data-text="continue_with"
+                    data-size="large" 
+                    data-logo_alignment="center">
+                 </div>
+            </div>
             <div class="text-center">
                 <p class="text-sm text-gray-500">Already have an account? <a href="#" class="text-black font-bold">Sign-in here</a></p>
             </div>
         </div>
     </section>
+    <script>
+        function handleCredentialResponse(response) {
+            // ถอดรหัส JWT Token ที่ Google ส่งกลับมา
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            
+            // ลองแสดงผลข้อมูลใน Console (กด F12 เพื่อดู)
+            console.log("ล็อกอินสำเร็จ!");
+            console.log("ชื่อ:", payload.name);
+            console.log("อีเมล:", payload.email);
+            console.log("รูปโปรไฟล์ URL:", payload.picture);
+
+            // แจ้งเตือนผู้ใช้ (คุณสามารถเปลี่ยนเป็นการ Redirect ไปหน้า Dashboard ได้)
+            alert(`ยินดีต้อนรับ ${payload.name} \nอีเมล: ${payload.email}`);
+
+            // 💡 สิ่งที่ต้องทำต่อในอนาคต:
+            // ส่ง response.credential ไปยัง Backend ของคุณ (เช่น PHP, Node.js) เพื่อตรวจสอบและล็อกอินในระบบของคุณ
+        }
+    </script>
 </body>
 </html>
